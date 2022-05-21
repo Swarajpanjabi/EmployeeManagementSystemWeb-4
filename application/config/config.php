@@ -24,7 +24,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 |
 */
 
-$config['base_url'] = 'http://localhost/EmployeeManagementSystemWeb-4/';
+
+$config['base_url'] = "http://localhost/projects/web_final_project/EmployeeManagementSystemWeb-4/";
 
 /*
 |--------------------------------------------------------------------------

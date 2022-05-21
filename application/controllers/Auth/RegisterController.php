@@ -27,7 +27,6 @@ class RegisterController extends CI_Controller
         // $employee_details = $this->Auth_model->get_employee_details();
         $employee_details = $this->Auth_model->get_employee_details($this->session->userdata('user_id'));
 
-        
         $this->form_validation->set_rules('first_name', 'First Name', 'required');
         $this->form_validation->set_rules('middle_name', 'Middle Name', 'required');
         $this->form_validation->set_rules('last_name', 'Last Name', 'required');
@@ -52,10 +51,9 @@ class RegisterController extends CI_Controller
         $this->form_validation->set_rules('state', 'State', 'required');
         $this->form_validation->set_rules('country', 'Country', 'required');
 
-
         if ($this->form_validation->run() == false) {
             $this->load->view('templates/header.php');
-            $this->load->view('auth/editDetails.php',  array("employee" => $employee_details));
+            $this->load->view('auth/editDetails.php', array("employee" => $employee_details));
         } else {
 
             $formArray = array();
@@ -65,7 +63,7 @@ class RegisterController extends CI_Controller
             $formArray['last_name'] = $this->input->post('last_name');
             $formArray['dob'] = $this->input->post('dob');
             //get id from session
-            
+
             $sevarth_id = $this->session->userdata('user_id');
             $formArray['sevarth_id'] = $sevarth_id;
             $formArray['qualification'] = $this->input->post('qualification');
@@ -90,23 +88,19 @@ class RegisterController extends CI_Controller
             $formArray['country'] = $this->input->post('country');
             $formArray['gender'] = $this->input->post('gender');
 
-            
-            
-            $insert_id =  $this->Auth_model->editDetails($formArray, $sevarth_id);
+            $insert_id = $this->Auth_model->editDetails($formArray, $sevarth_id);
             // if data of employees is edited
-            if($insert_id > 0){
+            if ($insert_id > 0) {
                 // set flash message
                 $this->session->set_flashdata('success', 'Your Details are Updated Successfully');
                 // redirect to dashboard
                 $this->navigate_to_dashboards($this->session->userdata('role_id'));
-            }else{
+            } else {
                 // set flash message
                 $this->session->set_flashdata('failure', 'Something went wrong');
                 // redirect to dashboard
                 $this->navigate_to_dashboards($this->session->userdata('role_id'));
             }
-            
-           
 
         }
     }
@@ -120,19 +114,17 @@ class RegisterController extends CI_Controller
         if ($is_details_fill) {
             $this->session->set_flashdata('failure', 'You already filled your details');
             $this->navigate_to_dashboards($this->session->userdata('role_id'));
-        } 
-        
-        else {
-            $this->form_validation->set_rules('first_name', 'First Name', 'required');
-            $this->form_validation->set_rules('middle_name', 'Middle Name', 'required');
-            $this->form_validation->set_rules('last_name', 'Last Name', 'required');
-            $this->form_validation->set_rules('dob', 'D.O.B', 'required');
+        } else {
+            $this->form_validation->set_rules('first_name', 'First Name', 'required|alpha');
+            $this->form_validation->set_rules('middle_name', 'Middle Name', 'required|alpha');
+            $this->form_validation->set_rules('last_name', 'Last Name', 'required|alpha');
+            $this->form_validation->set_rules('dob', 'D.O.B', 'required|callback_dob_age_check');
             $this->form_validation->set_rules('cast', 'Cast', 'required');
-            
+
             // $this->form_validation->set_rules('qualification', 'Qualification', 'required');
             $this->form_validation->set_rules('subcast', 'Sub_Cast', 'required');
             $this->form_validation->set_rules('designation', 'Designation', 'required');
-            $this->form_validation->set_rules('retirement_date', 'Retirement Date', 'required');
+            $this->form_validation->set_rules('retirement_date', 'Retirement Date', 'required|callback_retirement_check');
             // $this->form_validation->set_rules('experience', 'Experience', 'required');
             $this->form_validation->set_rules('aadhar_no', 'Aadhar No', 'required|min_length[12]|max_length[12]');
             $this->form_validation->set_rules('pan_no', 'Pan No', 'required');
@@ -164,7 +156,7 @@ class RegisterController extends CI_Controller
                 //experience pdf upload
                 if (!$this->upload->do_upload('experience')) {
                     $error = $this->upload->display_errors();
-                    $this->session->set_flashdata('failure', $error);
+                    $this->session->set_flashdata('failure', "experience ".$error);
                     $this->load->view('templates/header.php');
                     $this->load->view('auth/details.php');
 
@@ -186,16 +178,12 @@ class RegisterController extends CI_Controller
                         $this->load->view('templates/header.php');
                         $this->load->view('auth/details.php');
 
-                        echo "quif error " . $error;
-                        echo "quif error " . $error;
-                        echo "quif error " . $error;
-                        echo "quif error " . $error;
                     } else {
                         $qualification = $this->upload->data('file_name');
 
                         $config = array(
                             'upload_path' => "uploads/profile", //path for upload
-                            'allowed_types' => "*", //restrict extension
+                            'allowed_types' => "jpg|png", //restrict extension
                             'max_size' => '300000',
                             'max_width' => '30000',
                             'max_height' => '30000',
@@ -206,17 +194,11 @@ class RegisterController extends CI_Controller
                             $this->session->set_flashdata('failure', $error);
                             $this->load->view('templates/header.php');
                             $this->load->view('auth/details.php');
-                            echo "profile error " . $error;
-                            echo "profile error " . $error;
-                            echo "profile error " . $error;
-                            echo "profile error " . $error;
-                            echo "profile error " . $error;
+                           
 
                         } else {
                             $profile = $this->upload->data('file_name');
 
-                             
-                        
                             $formArray = array();
 
                             $formArray['first_name'] = $this->input->post('first_name');
@@ -226,15 +208,13 @@ class RegisterController extends CI_Controller
 
                             $sevarth_id = $this->session->userdata('user_id');
                             $employee = $this->Auth_model->get_employee_by_id($sevarth_id);
-                            
+
                             $formArray['qualification'] = $qualification;
                             $formArray['sevarth_id'] = $sevarth_id;
                             $formArray['cast'] = $this->input->post('cast');
                             $formArray['subcast'] = $this->input->post('subcast');
                             $formArray['department_id'] = $employee['dept_id'];
                             $formArray['org_id'] = $employee['org_id'];
-                            
-
 
                             $designation_id = $this->input->post('designation');
                             $formArray['designation'] = $designation_id;
@@ -257,18 +237,16 @@ class RegisterController extends CI_Controller
 
                             $insert_id = $this->Auth_model->addDetails($formArray, $this->session->userdata("role_id"));
 
-                            if ($insert_id> 0){
+                            if ($insert_id > 0) {
                                 //set flash data
                                 $this->session->set_flashdata('success', 'Data Added Successfully');
                                 $this->navigate_to_dashboards($this->session->userdata("role_id"));
 
-                            }
-                        
-                            else{
+                            } else {
                                 $this->session->set_flashdata('failure', 'Some Error Occurred While Adding Data');
                                 $this->navigate_to_dashboards($this->session->userdata("role_id"));
                             }
-                          
+
                         }
 
                     }
@@ -278,6 +256,42 @@ class RegisterController extends CI_Controller
 
         }
 
+    }
+
+    public function dob_age_check($dob)
+    {
+
+        $date = explode("-", $dob);
+        $selected_year = $date[0];
+        $current_year = date('Y');
+
+        $selected_age = $current_year - $selected_year;
+
+        
+        if ($selected_age < 22) {
+            $this->form_validation->set_message('dob_age_check', 'Age is not valid');
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    public function retirement_check($dob)
+    {
+
+        $date = explode("-", $dob);
+        $selected_year = $date[0];
+        $current_year = date('Y');
+
+        $selected_age =  $selected_year-$current_year;
+
+        
+        if ($selected_age < 0) {
+            $this->form_validation->set_message('retirement_check', 'Retirement Date Should be greater than DOB');
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public function logout()
@@ -345,6 +359,7 @@ class RegisterController extends CI_Controller
                     'dept_id' => $dept_id,
                     'hint_question' => $hint_question,
                     'hint_answer' => $hint_answer,
+                    "is_deleted" => 0
                 );
 
                 //if employee
@@ -362,8 +377,7 @@ class RegisterController extends CI_Controller
                         $this->load->view('templates/header.php');
                         $this->load->view("auth/register.php", array('events' => $events, 'dept' => $dept, 'role' => $role));
 
-                    } 
-                    else if ($director_response['result'] == false) {
+                    } else if ($director_response['result'] == false) {
                         $this->session->set_flashdata('failure', $director_response['error']);
 
                         $this->load->view('templates/header.php');
@@ -459,9 +473,8 @@ class RegisterController extends CI_Controller
                     $this->session->set_userdata('dept_id', $user->dept_id);
                     $this->session->set_userdata('user', $user);
 
+                    $this->session->set_flashdata('success', 'Login Successful');
 
-                    $this->session->set_flashdata('success', 'Login Successful'); 
-                    
                     // if user if not verified
                     // 0->not verified 1->verified
                     if ($user->is_verified == 0) {
@@ -478,7 +491,7 @@ class RegisterController extends CI_Controller
 
     public function navigate_to_dashboards($role_id)
     {
-       
+
         if ($role_id == 1) {
             redirect('home/HomeController/employee');
         } else if ($role_id == 2) {

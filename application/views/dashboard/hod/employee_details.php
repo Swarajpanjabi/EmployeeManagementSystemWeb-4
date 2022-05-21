@@ -10,18 +10,41 @@
         <section class="signup mt-5">
             <!-- <img src="images/signup-bg.jpg" alt=""> -->
             <div class="container container_new">
-                <?php
 
-if ($this->session->flashdata('msg')) {
-    echo '
-        <div class="container">
-            <div class="alert alert-danger">
-                ' . $this->session->flashdata("msg") . '
-            </div>
-        </div>
-        ';
-}
-?>
+                <div class="row">
+
+                    <div>
+
+                        <?php
+
+
+                    if ($this->session->flashdata('failure')) {
+                        echo '
+                                        <div class="container">
+                                        <div class="alert alert-danger">
+                                            ' . $this->session->flashdata("failure") . '
+                                        </div>
+                                        </div>
+                                        ';
+                    }
+                    ?>
+
+                        <?php
+
+
+                        if ($this->session->flashdata('success')) {
+                            echo '
+                                            <div class="container">
+                                            <div class="alert alert-success">
+                                                ' . $this->session->flashdata("success") . '
+                                            </div>
+                                            </div>
+                                            ';
+                        }
+                    ?>
+                    </div>
+
+                </div>
 
                 <?php echo validation_errors(); ?>
 

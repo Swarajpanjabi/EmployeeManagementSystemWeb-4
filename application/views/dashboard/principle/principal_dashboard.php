@@ -26,8 +26,18 @@ if ($this->session->flashdata('msg')) {
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                    <h2 class="card-title">Welcome Principal</h2>
-                        <p class="card-text">Use menu to navigate towards various modules using the nav icon in top
+                        <h2 class="card-title">
+                            <?php echo "Welcome ". $current_user['name'] ; ?>
+                        </h2>
+                        <h5 class="card-title">
+                            <?php echo "Sevarth-ID:   ". $current_user['sevarth_id'] ; ?>
+                        </h5>
+
+                        <h5 class="card-title">
+                            <?php echo "Organization Name:   ". $organization ; ?>
+                        </h5>
+                        <p class="card-text">Use menu to navigate towards various modules using the nav icon in
+                            top
                             navbar.</p>
                         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                         <a href="<?php echo base_url(). 'Auth/RegisterController/details'?>" class="btn btn-success">Add

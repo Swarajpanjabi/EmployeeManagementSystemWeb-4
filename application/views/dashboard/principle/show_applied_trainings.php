@@ -4,21 +4,43 @@
 
     <div class="container py-4">
 
-        <?php
-
-if ($this->session->flashdata('msg')) {
-    echo '
-                        <div class="container">
-                            <div class="alert alert-danger">
-                                ' . $this->session->flashdata("msg") . '
-                            </div>
-                        </div>
-                        ';
-}
-?>
 
 
-        <!-- Get Training By Status -->
+
+        <div class="row">
+
+            <div>
+
+                <?php
+
+
+                if ($this->session->flashdata('failure')) {
+                    echo '
+                                    <div class="container">
+                                    <div class="alert alert-danger">
+                                        ' . $this->session->flashdata("failure") . '
+                                    </div>
+                                    </div>
+                                    ';
+                }
+             ?>
+
+                <?php
+
+
+            if ($this->session->flashdata('success')) {
+                echo '
+                                <div class="container">
+                                <div class="alert alert-success">
+                                    ' . $this->session->flashdata("success") . '
+                                </div>
+                                </div>
+                                ';
+            }
+            ?>
+            </div>
+
+        </div> <!-- Get Training By Status -->
         <div class="container container_new ">
 
             <form action="<?php echo base_url() . 'Principle/PrincipleController/show_applied_trainings' ?>"

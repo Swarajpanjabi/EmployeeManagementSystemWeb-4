@@ -38,6 +38,13 @@ class Employee_model extends CI_Model
     public function complete_training($training_id, $pdf){
         $this->db->where('id', $training_id)->update('training', ['training_status_id' => '7', 'comp_certificate' => $pdf]);
     }
+
+    public function get_department_by_id($dept_id){
+        return $this->db->where('dept_id', $dept_id)->get("departments")->row_array();
+    }
+    public function get_organization_by_id($org_id){
+        return $this->db->where('org_id', $org_id)->get("organization")->row_array();
+    }
    
     
 }

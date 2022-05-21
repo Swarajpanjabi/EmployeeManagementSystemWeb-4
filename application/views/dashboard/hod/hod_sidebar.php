@@ -39,26 +39,20 @@
         </li>
         <li class="nav-item ps-4 py-2">
             <a href="#submenu3" data-bs-toggle="collapse" class=" px-0 align-middle">
-                <span class="ms-1 d-none d-sm-inline">Products</span> </a>
+                <span class="ms-1 d-none d-sm-inline">Training</span> </a>
             <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                <li class="w-100">
-                    <a href="#" class="pt-2 px-0"> <span class="d-none d-sm-inline">Product</span> 1</a>
+                <li class="nav-item py-2">
+                    <a href="<?php echo base_url()."Hod/HodController/apply_training" ?>" class=" px-0 align-middle">
+                        <span class="ms-1 d-none d-sm-inline">Apply Training</span> </a>
                 </li>
-                <li>
-                    <a href="#" class="pt-2 px-0"> <span class="d-none d-sm-inline">Product</span> 2</a>
-                </li>
-                <li>
-                    <a href="#" class="pt-2 px-0"> <span class="d-none d-sm-inline">Product</span> 3</a>
-                </li>
-                <li>
-                    <a href="#" class="pt-2 px-0"> <span class="d-none d-sm-inline">Product</span> 4</a>
+                <li class="nav-item py-2">
+                    <a href="<?php echo base_url()."Hod/HodController/show_applied_trainings" ?>"
+                        class=" px-0 align-middle">
+                        <span class="ms-1 d-none d-sm-inline">Applied Trainings</span> </a>
                 </li>
             </ul>
         </li>
-        <li class="nav-item py-2">
-            <a href="<?php echo base_url()."Hod/HodController/show_applied_trainings" ?>" class=" px-0 align-middle">
-                <span class="ms-1 d-none d-sm-inline">Applied Trainings</span> </a>
-        </li>
+
         <li class="nav-item py-2">
             <a href="<?php echo base_url()."index.php/Dsr_controller_folder/Dsr_controller/dept_view?dept=" ?>"
                 class=" px-0 align-middle">
@@ -74,12 +68,11 @@
         </li>
 
         <li class="nav-item py-2">
-            <a href="<?php echo base_url()."index.php/notification_controller/index" ?>"
-                class=" px-0 align-middle">
+            <a href="<?php echo base_url()."index.php/notification_controller/index" ?>" class=" px-0 align-middle">
                 <span class="ms-1 d-none d-sm-inline">Notifications</span> </a>
         </li>
     </ul>
-   
-    
+
+
 
 </nav>

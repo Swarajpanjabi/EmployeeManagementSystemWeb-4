@@ -191,7 +191,7 @@ class Dsr_controller extends CI_Controller {
 			}
 		}
 		else{
-			$this->session->set_flashdata('msg', "Quantity Distributed should not be greater than total Qtantity...");
+			$this->session->set_flashdata('failure', "Quantity Distributed should not be greater than total Quantity...");
 			redirect(base_url().'index.php/Dsr_controller_folder/Dsr_controller/dsr_cs_add');
 			
 		}
@@ -263,7 +263,7 @@ class Dsr_controller extends CI_Controller {
 		   }
 		   else{
 
-			$this->session->set_flashdata('msg', "Invalid Distribution date.....");
+			$this->session->set_flashdata('failure', "Invalid Distribution date.....");
 			redirect(base_url().'index.php/Dsr_controller_folder/Dsr_controller/dsr_cs_distribute_items?product_id='.$a.'');
 			
 

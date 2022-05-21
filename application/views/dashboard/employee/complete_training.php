@@ -4,8 +4,8 @@
 <body>
 
     <div class="main">
-    <div class="top-box py-3">
-            
+        <div class="top-box py-3">
+
 
         </div>
 
@@ -13,19 +13,45 @@
 
 
             <div class="container container_new">
-                <?php
 
-            if ($this->session->flashdata('msg')) {
-                echo '
-                    <div class="container">
-                        <div class="alert alert-danger">
-                            ' . $this->session->flashdata("msg") . '
-                        </div>
+
+
+
+
+                <div class="row">
+
+                    <div>
+
+                        <?php
+
+
+                            if ($this->session->flashdata('failure')) {
+                                echo '
+                                                <div class="container">
+                                                <div class="alert alert-danger">
+                                                    ' . $this->session->flashdata("failure") . '
+                                                </div>
+                                                </div>
+                                                ';
+                            }
+                            ?>
+
+                        <?php
+
+
+                            if ($this->session->flashdata('success')) {
+                                echo '
+                                                <div class="container">
+                                                <div class="alert alert-success">
+                                                    ' . $this->session->flashdata("success") . '
+                                                </div>
+                                                </div>
+                                                ';
+                            }
+                        ?>
                     </div>
-                    ';
-            }
-            ?>
-                <?php
+
+                </div> <?php
                     $attributes = array('role' => 'form');
                     echo form_open_multipart("Employee/EmployeeController/complete_training");
                 ?>
