@@ -65,6 +65,7 @@
                     <tr>
                         <th scope="row"><?php echo $employees['sevarth_id'] ?></th>
                         <td><?php echo $employees['name'] ?></td>
+                        <td><?php echo $employees['email'] ?></td>
                         <td>
                             <?php
                                 if ($employees['role_id'] == -1) {

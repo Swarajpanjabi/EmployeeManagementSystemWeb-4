@@ -319,7 +319,7 @@ class RegisterController extends CI_Controller
             }
 
         } else {
-            $this->form_validation->set_rules('sevarth_id', 'Sevarth ID', 'required|regex_match[/^[0-9]{12}$/]|callback_sevarthID_check|min_length[12]|max_length[12]');
+            $this->form_validation->set_rules('sevarth_id', 'Sevarth ID', 'required|callback_sevarthID_check|min_length[12]|max_length[12]');
             $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[employees.email]');
             $this->form_validation->set_rules('password', 'Password', 'required|min_length[5]|max_length[15]');
             $this->form_validation->set_rules('name', 'User Name', 'required');

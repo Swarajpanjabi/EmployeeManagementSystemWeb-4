@@ -4,18 +4,40 @@
 
     <div class="container py-4">
 
-        <?php
+    <div class="row">
 
-if ($this->session->flashdata('msg')) {
-    echo '
-        <div class="container">
-            <div class="alert alert-danger">
-                ' . $this->session->flashdata("msg") . '
-            </div>
+        <div>
+
+            <?php
+
+
+                if ($this->session->flashdata('failure')) {
+                    echo '
+                                    <div class="container">
+                                    <div class="alert alert-danger">
+                                        ' . $this->session->flashdata("failure") . '
+                                    </div>
+                                    </div>
+                                    ';
+                }
+            ?>
+
+            <?php
+
+
+            if ($this->session->flashdata('success')) {
+                echo '
+                                <div class="container">
+                                <div class="alert alert-success">
+                                    ' . $this->session->flashdata("success") . '
+                                </div>
+                                </div>
+                                ';
+            }
+        ?>
         </div>
-        ';
-}
-?>
+
+        </div>
 
         <!-- Welcome Card -->
         <div class="card my-3 mx-lg-5 px-lg-4 shadow py-2" >
