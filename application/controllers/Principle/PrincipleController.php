@@ -8,6 +8,7 @@ class PrincipleController extends CI_Controller
         parent::__construct(); //important to call parent constructor
         $this->load->model('Principle_model');
         $this->load->library('FPDF');
+        $this->load->model('leave_model');
 
     }
     public function index()
@@ -247,5 +248,31 @@ class PrincipleController extends CI_Controller
 
         $pdf->Output();
 
+    }
+
+    
+    //Fetching data of all leave Applications
+    public function all_leave()
+    {
+        $this->load->view('templates/header.php');
+        $this->load->view('templates/navbar.php');
+        $this->load->view('dashboard/principle/principle_sidebar.php');
+
+        $leave = $this->leave_model->getLeaveApplication();
+        $data = array();
+        $data['leave_application'] = $leave;
+        $this->load->view('dashboard/principle/all_leave', $data);
+    }
+
+    public function approve_leave($application_id)
+    {
+        $this->leave_model->approve_leave($application_id);
+        redirect(base_url('principal_all_leave'));
+    }
+
+    public function reject_leave($application_id)
+    {
+        $this->leave_model->reject_leave($application_id);
+        redirect(base_url('principal_all_leave'));
     }
 }

@@ -9,7 +9,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#" style="color: #6c757d !important; ">Dashboard</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">All Leave</li>
+                            <li class="breadcrumb-item active" aria-current="page">Leave Application Verfication</li>
                         </ol>
                     </nav>
                 </h6>
@@ -18,8 +18,8 @@
 
         <div class="card card-2">
             <div class="card-body table-responsive" style="overflow-x: scroll; overflow-y: scroll">
-                <h5 class="card-title">All Leave Applications</h5>
-                <form action="<?php echo base_url('update_status') ?>" method="post">
+                <h5 class="card-title">Leave Application Verfication</h5>
+                <form action="<?php //echo base_url('update_status') ?>" method="post">
                     <table id="example" class="table table-striped table-hover align-middle" style="width: 100%;">
                         <thead>
                             <tr>
@@ -28,7 +28,7 @@
                                 <th>STAFF NAME</th>
                                 <th>LEAVE TYPE</th>
                                 <th>LEAVE REASON</th>
-                                <th>STATUS APPROVE</th>
+                                <th>LEAVE STATUS</th>
                                 <th>RANGE</th>
                                 <th>DURATION</th>
                                 <th>ACTION</th>
@@ -40,7 +40,7 @@
                                 foreach ($leave_application as $key) {
                             ?>
                                     <tr>
-                                        <td style="text-align: center;">
+                                        <td style="text-align: center;" >
                                             <input type="hidden" value="<?php echo ($key['application_id']); ?>" name="application_id" id="application_id"><?php echo ($key['application_id']); ?>
                                         </td>
                                         <td><?php echo ($key['sevarth_id']); ?></td>
@@ -48,7 +48,7 @@
                                         <td><?php echo ($key['leave_type']); ?></td>
                                         <td style="max-width:100px"><?php echo ($key['leave_reason']); ?></td>
                                         <td class="approved"><?php echo ($key['leave_status']); ?></td>
-                                        <td><?php echo ($key['start_date']); ?> -> <?php echo ($key['end_date']); ?></td>
+                                        <td> <b>From : </b> <?php echo ($key['start_date']); ?><br> <b>To :&nbsp;&nbsp;&nbsp; &nbsp;  </b> <?php echo ($key['end_date']); ?></td>
                                         <td style="text-align: center;"><?php echo ($key['duration']); ?></td>
                                         <td>
                                             <!-- <div class="btn-group">
@@ -65,8 +65,8 @@
                                                     <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li><a class="dropdown-item text-success" href="<?php echo base_url('all_leave/approve_leave/' . $key['application_id']); ?>">Approve</a></li>
-                                                    <li><a class="dropdown-item text-danger" href="<?php echo base_url('all_leave/reject_leave/' . $key['application_id']); ?>">Reject</a></li>
+                                                    <li><a class="dropdown-item text-success" href="<?php echo base_url('principal_all_leave/approve_leave/' . $key['application_id']); ?>">Approve</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="<?php echo base_url('principal_all_leave/reject_leave/' . $key['application_id']); ?>">Reject</a></li>
                                                     <!-- <li><a href="" id="approve">Approve</a></li>
                                                     <li><a href="" id="reject">Reject</a></li> -->
 
@@ -100,7 +100,17 @@
         sidebar.classList.toggle("active-nav")
         container.classList.toggle("active-cont")
     })
+</script>
+
+<script>
+    $(document).ready(function () {
+    $('#example').DataTable({
+        order: [[0, 'desc']],
+    })
+    
+});
+
 
 </script>
 
-<script src="<?php echo base_url(); ?>js/leave.js"></script>
+<!-- <script src="<?php echo base_url(); ?>js/leave.js"></script>-->

@@ -31,10 +31,28 @@ class HomeController extends CI_Controller
             $data['dept']= "Computer";
             break;
           case "2":
-            $data['dept'] = "Electrical";
+            $data['dept'] = "IT";
             break;
           case "3":
-            $data['dept'] = "IT";
+            $data['dept'] = "Mechanical";
+            break;
+          case "4":
+            $data['dept'] = "Civil";
+            break;
+          case "5":
+            $data['dept'] = "Electrical";
+            break;
+          case "6":
+            $data['dept'] = "Electronics";
+            break;
+          case "7":
+            $data['dept'] = "Pharmacy";
+            break;
+          case "8":
+            $data['dept'] = "Chemical";
+            break;
+          case "9":
+            $data['dept'] = "Plastic Polymer";
             break;
           default:
             $data['dept']= "Computer";  

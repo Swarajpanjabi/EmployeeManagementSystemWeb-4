@@ -36,7 +36,11 @@
                 class=" px-0 align-middle">
                 <span class="ms-1 d-none d-sm-inline">Add Completion Certificate</span></a>
         </li>
-        
+        <li class="nav-item py-2">
+            <a href="<?php echo base_url()."cascontroller/formcontroller/index" ?>"
+                class=" px-0 align-middle">
+                <span class="ms-1 d-none d-sm-inline">CAS</span> </a>
+        </li>
         <li class="nav-item py-2">
             <a href="#submenu1" data-bs-toggle="collapse" class=" px-0 align-middle">
                 <span class="ms-1 d-none d-sm-inline">Leave</span> </a>

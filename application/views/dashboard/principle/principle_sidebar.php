@@ -29,6 +29,15 @@
                 class=" px-0 align-middle">
                 <span class="ms-1 d-none d-sm-inline">Show Employees</span> </a>
         </li>
+
+
+        <li class="nav-item py-2">
+            <a href="<?php echo base_url()."principal_all_leave" ?>"
+                class=" px-0 align-middle">
+                <span class="ms-1 d-none d-sm-inline">Leave Application Verification</span> </a>
+        </li>
+
+
         <li class="nav-item py-2">
             <a href="<?php echo base_url()."Principle/PrincipleController/show_applied_trainings" ?>"
                 class=" px-0 align-middle">

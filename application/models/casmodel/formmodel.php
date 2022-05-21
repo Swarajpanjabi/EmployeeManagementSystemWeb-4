@@ -41,9 +41,38 @@ class Formmodel extends CI_MODEL
         $this->db->update('form');
     }
 
-    public function rejectform($application_id)
+    public function rejectform($application_id,$message)
     {
-        $this->db->set('status', '4', FALSE);
+        $data = array(
+            'status' => '4',
+            'Text' => $message
+        );
+        
+        $this->db->set($data, FALSE);
+        $this->db->where('Id', $application_id);
+        $this->db->update('form');
+    }
+
+    public function dtorejectform($application_id,$message)
+    {
+        $data = array(
+            'status' => '5',
+            'Text' => $message
+        );
+
+        $this->db->set($data, FALSE);
+        $this->db->where('Id', $application_id);
+        $this->db->update('form');
+    }
+
+    public function jdrejectform($application_id,$message)
+    {
+        $data = array(
+            'status' => '6',
+            'Text' => $message
+        );
+
+        $this->db->set($data, FALSE);
         $this->db->where('Id', $application_id);
         $this->db->update('form');
     }
@@ -79,6 +108,26 @@ class Formmodel extends CI_MODEL
         $this->db->set('status', '2', FALSE);
         $this->db->where('Id', $id);
         $this->db->update('form');
+    }
+
+    public function otp($data)
+    {
+        $this->db->insert('otp',$data);
+    }
+
+    public function verifyotp($email,$otp)
+    {
+        $query = $this->db->where(['email' => $email,'otp' => $otp])
+                 ->get('otp');
+
+        if($query->num_rows())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 

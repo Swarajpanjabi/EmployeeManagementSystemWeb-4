@@ -31,7 +31,7 @@
                     <i class="fa fa-user" aria-hidden="true" style="font-size: 20px;"></i> <span class="nav_logo-name">Employee Name</span> 
                 </a>
                 <div class="nav_list"> 
-                    <a href="#" class="nav_link "> 
+                    <a href="<?php echo base_url();?>Employee/EmployeeController/index" class="nav_link "> 
                         <i class="fa fa-th-large" aria-hidden="true" style="font-size: 20px;"></i><span class="nav_name">Dashboard</span> 
                     </a> 
                     <a href="<?php echo base_url();?>cascontroller/formcontroller/index" class="nav_link"> 

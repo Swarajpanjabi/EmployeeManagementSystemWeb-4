@@ -25,8 +25,10 @@ class leaveController extends CI_Controller
         $data = array();
         $data['leave_types'] = $leave;
 
+        $user_id = $this->session->userdata('user_id');
+
         //Employee Details
-        $employee = $this->leavemodel->fetchEmployeeDetails($this->session->userdata('user_id')); //GPA2 GPAMTCM05 Passed the Sevarth ID
+        $employee = $this->leavemodel->fetchEmployeeDetails($user_id); //GPA2 GPAMTCM05 Passed the Sevarth ID
         $data['employees_details'] = $employee;
         // print_r($data) ;
 

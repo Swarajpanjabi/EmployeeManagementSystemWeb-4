@@ -52,66 +52,85 @@ class Formcontroller extends CI_Controller
 		// $this->form_validation->set_rules('Grade', 'Grade', 'required');
 		$this->form_validation->set_error_delimiters('<div class="text-danger"></div>');
 
-		$config['upload_path'] = './uploads/';
-		$config['allowed_types'] = 'gif|jpg|png|pdf';
-		$this->upload->initialize($config);
-		if($this->form_validation->run() && $this->upload->do_upload('userfile'))
-		{
-			// $ori_filename = $_FILES['userfile']['name'];
-			// $new_name = time()."".str_replace(' ','-',$ori_filename);
-			
-			// $config['file_name'] = $new_name;
-			
-			$post = $this->upload->data();
-
-			$image_path = base_url("uploads/".$post['raw_name'].$post['file_ext']);
-
-			$data = [
-				'Surname' => $this->input->post('Surname'),
-				'Firstname' => $this->input->post('Firstname'),
-				'Middlename' => $this->input->post('Middlename'),
-				'Email' => $this->input->post('Email'),
-				'Phone' => $this->input->post('Phone'),
-				'Designation' => $this->input->post('Designation'),
-				'DOB' => $this->input->post('DOB'),
-				'Age' => $this->input->post('Age'),
-				'Gender' => $this->input->post('Gender'),
-				'DOJ' => $this->input->post('DOJ'),
-				'EmployeeCode' => $this->input->post('EmployeeCode'),
-				'Branch' => $this->input->post('Branch'),
-				'Address' => $this->input->post('Address'),
-				'State' => $this->input->post('State'),
-				'City' => $this->input->post('City'),
-				'Taluka' => $this->input->post('Taluka'),
-				'Village' => $this->input->post('Village'),
-				'Pincode' => $this->input->post('Pincode'),
-				'Probession' => $this->input->post('Probession'),
-				'GRNo' => $this->input->post('GRNo'),
-				'InstituteName' => $this->input->post('InstituteName'),
-				'ServiceStartDate' => $this->input->post('ServiceStartDate'),
-				'ServiceEndDate' => $this->input->post('ServiceEndDate'),
-				'TrainingName' => $this->input->post('TrainingName'),
-				'SponsoredBy' => $this->input->post('SponsoredBy'),
-				'Type' => $this->input->post('Type'),
-				'Duration' => $this->input->post('Duration'),
-				'StartDate' => $this->input->post('StartDate'),
-				'EndDate' => $this->input->post('EndDate'),
-				'CRStartDate' => $this->input->post('CRStartDate'),
-				'CREndDate' => $this->input->post('CREndDate'),
-				'Grade' => $this->input->post('Grade'),
+		if ($this->form_validation->run()) {
+			$ori_filename = $_FILES['userfile']['name'];
+			$config = [
+				'upload_path'   => './uploads/',
+				'allowed_types' => 'jpg|gif|png',
+				'overwrite'     => 1,
 			];
-			$data['Proof'] = $image_path;
+
+			$ImageCount = count($_FILES['userfile']['name']);
+			// printf($ImageCount);
+			for ($i = 0; $i < $ImageCount; $i++) {
+				$_FILES['file']['name']       = $_FILES['userfile']['name'][$i];
+				$_FILES['file']['type']       = $_FILES['userfile']['type'][$i];
+				$_FILES['file']['tmp_name']   = $_FILES['userfile']['tmp_name'][$i];
+				$_FILES['file']['error']      = $_FILES['userfile']['error'][$i];
+				$_FILES['file']['size']       = $_FILES['userfile']['size'][$i];
+
+				// Load and initialize upload library
+				$this->upload->initialize($config);
+
+				// Upload file to server
+				if ($this->upload->do_upload('file')) {
+					// Uploaded file data
+					$this->upload->data();
+					// $uploadImgData[$i]['userfile'] = $imageData['file_name'];
+				}
+			}
+
+			// $image_path = $config['file_name'];
+			// print_r($image_path);
+			$data =
+				[
+					'Surname' => $this->input->post('Surname'),
+					'Firstname' => $this->input->post('Firstname'),
+					'Middlename' => $this->input->post('Middlename'),
+					'Email' => $this->input->post('Email'),
+					'Phone' => $this->input->post('Phone'),
+					'Designation' => $this->input->post('Designation'),
+					'DOB' => $this->input->post('DOB'),
+					'Age' => $this->input->post('Age'),
+					'Gender' => $this->input->post('Gender'),
+					'DOJ' => $this->input->post('DOJ'),
+					'EmployeeCode' => $this->input->post('EmployeeCode'),
+					'Branch' => $this->input->post('Branch'),
+					'Address' => $this->input->post('Address'),
+					'State' => $this->input->post('State'),
+					'City' => $this->input->post('City'),
+					'Taluka' => $this->input->post('Taluka'),
+					'Village' => $this->input->post('Village'),
+					'Pincode' => $this->input->post('Pincode'),
+					'Probession' => $this->input->post('Probession'),
+					'GRNo' => $this->input->post('GRNo'),
+					'InstituteName' => implode(',', $this->input->post('InstituteName')),
+					'ServiceStartDate' => implode(',', $this->input->post('ServiceStartDate')),
+					'ServiceEndDate' => implode(',', $this->input->post('ServiceEndDate')),
+					'TrainingName' => implode(',', $this->input->post('TrainingName')),
+					'SponsoredBy' => implode(',', $this->input->post('SponsoredBy')),
+					'Type' => implode(',', $this->input->post('Type')),
+					'Duration' => implode(',', $this->input->post('Duration')),
+					'StartDate' => implode(',', $this->input->post('StartDate')),
+					'EndDate' => implode(',', $this->input->post('EndDate')),
+					'CRStartDate' => implode(',', $this->input->post('CRStartDate')),
+					'CREndDate' => implode(',', $this->input->post('CREndDate')),
+					'Grade' => implode(',', $this->input->post('Grade')),
+				];
+			$data['Proof'] = implode(',', $ori_filename);
 			$this->formmodel->insertCas($data);
 			$this->session->set_flashdata('status', 'Your form has been submitted successfully');
+
 			$subject = 'Submitted';
 			$message = 'Your form has been Successfully Submitted';
-			$this->sendmail($data['Email'],$subject,$message);
+			$this->sendmail($data['Email'], $subject, $message);
 			redirect(base_url('cascontroller/formcontroller/index'));
-		}
-		else
-		{
-			$upload_error = $this->upload->display_errors('<p>', '</p>');;
+		} else {
+			// $error = array('error' => $this->upload->display_errors());
 			$this->index();
+			// $this->load->view('Layouts/header');
+			// $this->load->view('formview');
+			// $this->load->view('Layouts/footer');
 		}
 	}
 
@@ -191,25 +210,25 @@ class Formcontroller extends CI_Controller
 
 	public function principalreject($id)
 	{
-		if(!$this->formmodel->rejectform($id))
-		{
-			redirect(base_url('cascontroller/formcontroller/principal'));
+		$message = $this->input->post('message');
+		if (!$this->formmodel->rejectform($id, $message)) {
+			redirect(base_url('formcontroller/principal'));
 		}
 	}
 
 	public function dtoreject($id)
 	{
-		if(!$this->formmodel->rejectform($id))
-		{
-			redirect(base_url('cascontroller/formcontroller/dto'));
+		$message = $this->input->post('message');
+		if (!$this->formmodel->dtorejectform($id, $message)) {
+			redirect(base_url('formcontroller/dto'));
 		}
 	}
 
 	public function jdreject($id)
 	{
-		if(!$this->formmodel->rejectform($id))
-		{
-			redirect(base_url('cascontroller/formcontroller/jd'));
+		$message = $this->input->post('message');
+		if (!$this->formmodel->jdrejectform($id, $message)) {
+			redirect(base_url('formcontroller/jd'));
 		}
 	}
 
@@ -281,6 +300,55 @@ class Formcontroller extends CI_Controller
 		if(!$this->formmodel->revertChangesJd($id))
 		{
 			redirect(base_url('cascontroller/formcontroller/viewDetailsjd/'.$id));
+		}
+	}
+
+	public function otp()
+	{
+		$otp = rand(111111, 999999);
+		$email = $this->input->post('email');
+
+		$data = [
+			'email' => $email,
+			'otp' => $otp
+		];
+
+		$config = array(
+			'protocol' => 'smtp',
+			'smtp_host' => 'ssl://smtp.gmail.com',
+			'smtp_timeout' => 60,
+			'smtp_port' => 465,
+			'smtp_user' => 'codingems123@gmail.com',
+			'smtp_pass' => 'Pass@123',
+			'charset' => 'utf-8',
+			'mailtype' => 'html',
+			'newline' => "\r\n",
+		);
+
+		$subject = "OTP";
+		$message = "Your OTP form Email Verification is $otp ";
+		$this->email->initialize($config);
+		$this->email->from('ems@gmail.com', 'OTP');
+		$this->email->to($email);
+		$this->email->subject($subject);
+		$this->email->message($message);
+		$this->email->send();
+
+		$this->formmodel->otp($data);
+		echo $otp;
+	}
+
+	public function verifyotp()
+	{
+		$email = $this->input->post('email');
+		$otp = $this->input->post('otp');
+		if ($this->formmodel->verifyotp($email, $otp))
+		{
+			echo 'success';
+		}
+		else
+		{
+			echo 'error';
 		}
 	}
 

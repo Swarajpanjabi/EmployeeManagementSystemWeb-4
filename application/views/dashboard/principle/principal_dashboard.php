@@ -18,7 +18,7 @@ if ($this->session->flashdata('msg')) {
 ?>
 
         <!-- Welcome Card -->
-        <div class="card my-3 mx-lg-5 px-lg-4 shadow py-2" style="">
+        <div class="card my-3 mx-lg-5 px-lg-4 shadow py-2" >
             <div class="row g-0">
                 <div class="col-md-4">
                     <img src="<?php echo base_url(); ?>/public/banner-img.png" class="img-fluid rounded-start"

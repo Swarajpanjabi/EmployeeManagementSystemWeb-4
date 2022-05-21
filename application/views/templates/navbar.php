@@ -7,10 +7,13 @@
         </a>
 
         <div class="dropdown ms-auto text-end d-flex align-items-center justify-content-center">
-        <i class="bi bi-bell-fill"></i>
-
-            <a href="<?php echo base_url() . "/logout"?>"
-                class="d-block link-dark text-decoration-none fw-bold text-black h5" id="dropdownUser1"
+           
+            
+            <a style="color:black !important;font-size:1.3rem; margin-right:2rem;" href="<?php echo base_url() . "index.php/notification_controller/index"?>"
+                class="bi bi-bell-fill p-2" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+            </a>
+      <a href="<?php echo base_url() . "/logout"?>"
+                class="d-block link-dark text-decoration-none text-danger h5" id="dropdownUser1"
                 data-bs-toggle="tooltip" data-bs-placement="bottom" title="Go to profile">
                 Logout
             </a>

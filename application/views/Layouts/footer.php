@@ -1,3 +1,4 @@
+
 <div class="d-flex flex-column h-100">
     <!-- FOOTER -->
     <!-- <footer class="w-100 py-4 flex-shrink-0" style="background-color: #212529;"> -->
@@ -52,6 +53,73 @@
 <script src="<?= base_url();?>/public/cas_assets/status.js"></script>
 <script src="<?= base_url();?>/public/cas_assets/modal.js"></script>
 <script src="<?= base_url();?>/public/cas_assets/statusModal.js"></script>
+<script src="<?= base_url(); ?>/public/cas_assets/rejectmodal.js"></script>
+
+<script>
+    $(document).ready(function() {
+
+        $("#send").click(function() {
+
+            var email = $('#email').val();
+
+            // $("#email").prop('disabled', true)
+            if ($('#email').val()) {
+
+                $("#send").css("display", "none");
+                $("#verify").css("display", "block");
+                $("#otp").css("display", "block");
+                $.ajax({
+                    url: "<?php echo base_url(); ?>cascontroller/formcontroller/otp",
+                    method: "POST",
+                    data: {
+                        email: email
+                    },
+                    error: function() {
+                        alert("Error");
+                    },
+                    success: function(data) {
+                        alert("Email has been sent to the given Email Address");
+                        alert(data);
+                    }
+                });
+            } else {
+                alert("Please enter your email address");
+            }
+
+        });
+
+        $("#verify").click(function() {
+
+            var email = $('#email').val();
+            var otp = $('#otp').val();
+
+            $.ajax({
+                url: "<?php echo base_url(); ?>cascontroller/formcontroller/verifyotp",
+                method: "POST",
+                data: {
+                    email: email,
+                    otp: otp
+                },
+                error: function() {
+                    alert("Error");
+                },
+                success: function(data) {
+                    if (data == 'success') {
+                        $("#otp").css("display", "none");
+                        $("#verify").css("display", "none");
+                        $("#verified").css("display", "block");
+                        alert("Verified");
+                        // $("#email").prop('disabled', true);
+                    } else {
+                        alert("Wrong Otp");
+                    }
+
+                }
+            });
+        });
+
+    });
+</script>
 
 
 </body>
