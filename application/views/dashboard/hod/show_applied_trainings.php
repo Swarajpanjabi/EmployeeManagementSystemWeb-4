@@ -4,18 +4,40 @@
 
     <div class="container py-4">
 
-        <?php
+        <div class="row">
 
-if ($this->session->flashdata('msg')) {
-    echo '
-                        <div class="container">
-                            <div class="alert alert-danger">
-                                ' . $this->session->flashdata("msg") . '
-                            </div>
-                        </div>
-                        ';
-}
-?>
+            <div>
+
+                <?php
+
+
+                if ($this->session->flashdata('failure')) {
+                    echo '
+                                    <div class="container">
+                                    <div class="alert alert-danger">
+                                        ' . $this->session->flashdata("failure") . '
+                                    </div>
+                                    </div>
+                                    ';
+                }
+             ?>
+
+                <?php
+
+
+            if ($this->session->flashdata('success')) {
+                echo '
+                                <div class="container">
+                                <div class="alert alert-success">
+                                    ' . $this->session->flashdata("success") . '
+                                </div>
+                                </div>
+                                ';
+            }
+            ?>
+            </div>
+
+        </div>
 
 
         <!-- Get Training By Status -->
@@ -133,7 +155,7 @@ if ($this->session->flashdata('msg')) {
                         <th scope="row"><?php echo $training['name'] ?></th>
                         <th scope="row">
                             <?php if ($training['duration'] < 8) {echo $training["duration"] . " days";} else {echo ceil(($training['duration'] % 365) / 7) . " weeks";}?>
-                        </th>      
+                        </th>
                         <th scope="row"><?php echo $training['start_date'] ?></th>
                         <th scope="row"><?php echo $training['end_date'] ?></th>
                         <th scope="row"><?php echo $training['org_name'] ?></th>

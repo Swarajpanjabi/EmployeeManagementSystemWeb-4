@@ -5,25 +5,37 @@
     <div class="row">
 
         <div>
-            <!-- success alert -->
 
             <?php
 
-                    $success = $this->session->userdata('msg');
-                    if ($success != "") {?>
 
-            <div class="alert alert-success"><?php echo $success ?></div>
+                if ($this->session->flashdata('failure')) {
+                    echo '
+                                    <div class="container">
+                                    <div class="alert alert-danger">
+                                        ' . $this->session->flashdata("failure") . '
+                                    </div>
+                                    </div>
+                                    ';
+                }
+             ?>
 
-            <?php }?>
+            <?php
 
 
-
-
-
+            if ($this->session->flashdata('success')) {
+                echo '
+                                <div class="container">
+                                <div class="alert alert-success">
+                                    ' . $this->session->flashdata("success") . '
+                                </div>
+                                </div>
+                                ';
+            }
+        ?>
         </div>
+
     </div>
-
-
 
     <div class="container py-4">
         <div class="top-box py-3">
@@ -40,10 +52,20 @@
                 <div class="col-md-8">
                     <div class="card-body">
                         <h2 class="card-title">
-                            Welcome Employee
-
+                            <?php echo "Welcome ". $current_user['name'] ; ?>
                         </h2>
-                        <p class="card-text">Use menu to navigate towards various modules using the nav icon in top
+                        <h5 class="card-title">
+                            <?php echo "Sevarth-ID:   ". $current_user['sevarth_id'] ; ?>
+                        </h5>
+
+                        <h5 class="card-title">
+                            <?php echo "Department Name:  ". $department ; ?>
+                        </h5>
+                        <h5 class="card-title">
+                            <?php echo "Organization Name:   ". $organization ; ?>
+                        </h5>
+                        <p class="card-text">Use menu to navigate towards various modules using the nav icon in
+                            top
                             navbar.</p>
                         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
 

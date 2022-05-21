@@ -13,20 +13,45 @@
 
 
             <div class="container container_new">
-                <?php
 
-            if ($this->session->flashdata('msg')) {
-                echo '
-                    <div class="container">
-                        <div class="alert alert-danger">
-                            ' . $this->session->flashdata("msg") . '
-                        </div>
+
+
+                <div class="row">
+
+                    <div>
+
+                        <?php
+
+
+                            if ($this->session->flashdata('failure')) {
+                                echo '
+                                                <div class="container">
+                                                <div class="alert alert-danger">
+                                                    ' . $this->session->flashdata("failure") . '
+                                                </div>
+                                                </div>
+                                                ';
+                            }
+                        ?>
+
+                        <?php
+
+
+                        if ($this->session->flashdata('success')) {
+                            echo '
+                                            <div class="container">
+                                            <div class="alert alert-success">
+                                                ' . $this->session->flashdata("success") . '
+                                            </div>
+                                            </div>
+                                            ';
+                        }
+                    ?>
                     </div>
-                    ';
-            }
-            ?>
 
-              
+                </div>
+
+
 
 
                 <div class="signup-content">
@@ -40,7 +65,7 @@
                     <form action="" name="registerForm" id="registerForm signupform" class="signupform" method="post">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="name">Name</label>
+                                <label for="name">Training Name</label>
                                 <input type="text" name="name" id="name" value="<?php echo set_value('name'); ?>"
                                     class="form-input form-control <?php echo (form_error('name') != "") ? 'is-invalid' : '' ?>"
                                     placeholder="Training Name">

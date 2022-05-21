@@ -5,64 +5,62 @@
 
     <div class="main">
 
+        <div class="top-box py-3">
+
+        </div>
+
         <section class="signup mt-5">
-            <div class="top-box py-3">
+
+            <div class="row">
+
+                <div>
+
+                    <?php
+
+
+                if ($this->session->flashdata('failure')) {
+                    echo '
+                                    <div class="container">
+                                    <div class="alert alert-danger">
+                                        ' . $this->session->flashdata("failure") . '
+                                    </div>
+                                    </div>
+                                    ';
+                }
+             ?>
+
+                    <?php
+
+
+                if ($this->session->flashdata('success')) {
+                    echo '
+                                    <div class="container">
+                                    <div class="alert alert-success">
+                                        ' . $this->session->flashdata("success") . '
+                                    </div>
+                                    </div>
+                                    ';
+                }
+                ?>
+                </div>
 
             </div>
 
 
             <div class="container container_new">
 
-                <div class="row">
-
-                    <div>
-
-                        <?php
-
-
-                            if ($this->session->flashdata('failure')) {
-                                echo '
-                                                <div class="container">
-                                                <div class="alert alert-danger">
-                                                    ' . $this->session->flashdata("failure") . '
-                                                </div>
-                                                </div>
-                                                ';
-                            }
-                        ?>
-
-                        <?php
-
-
-                        if ($this->session->flashdata('success')) {
-                            echo '
-                                            <div class="container">
-                                            <div class="alert alert-success">
-                                                ' . $this->session->flashdata("success") . '
-                                            </div>
-                                            </div>
-                                            ';
-                        }
-                        ?>
-                    </div>
-
-                </div>
-
-
-
-
                 <div class="signup-content">
 
-                    <h2 class="text-center">Add Completed Training</h2>
+                    <h2 class="text-center">Apply For Training</h2>
                     <?php
                         $attributes = array('role' => 'form');
-                        echo form_open_multipart("Employee/EmployeeController/add_completed_training");
+                        echo form_open_multipart("hod/HodController/apply_training");
                     ?>
 
                     <form action="" name="registerForm" id="registerForm signupform" class="signupform" method="post">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="name">Name</label>
+                                <label for="name">Training Name</label>
                                 <input type="text" name="name" id="name" value="<?php echo set_value('name'); ?>"
                                     class="form-input form-control <?php echo (form_error('name') != "") ? 'is-invalid' : '' ?>"
                                     placeholder="Training Name">
@@ -132,6 +130,7 @@
                         <div class="form-row">
 
 
+
                             <div class="form-group">
                                 <label for="training_type">Training Type</label>
                                 <select class="form-select" name="training_type" id="training_type">
@@ -149,6 +148,13 @@
                                 </select>
                             </div>
 
+
+
+
+                        </div>
+
+                        <div class="form-row">
+
                             <div class="form-group">
                                 <label for="pdf">Select PDF</label>
                                 <input type="file" name="pdf" id="pdf" value="<?php echo set_value('pdf'); ?>"
@@ -162,7 +168,7 @@
 
                 </div>
                 <div class="form-row">
-                    <div class="form-group">
+                    <div class=" form-group">
                         <input type="submit" name="submit" id="submit" class="form-submit" value="Submit" />
                     </div>
 

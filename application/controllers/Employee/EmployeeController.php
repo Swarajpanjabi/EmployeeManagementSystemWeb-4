@@ -11,11 +11,19 @@ class EmployeeController extends CI_Controller
     }
     public function index()
     {
+        //get session of user
+$current_user_id = $this->session->userdata('user_id');
 
+$current_user = $this->Auth_model->get_employee_by_id($current_user_id);
+
+$department = $this->Employee_model->get_department_by_id($current_user['dept_id']);
+$organization = $this->Employee_model->get_organization_by_id($current_user['org_id']);
+
+       
         $this->load->view('templates/header.php');
         $this->load->view('templates/navbar.php');
         $this->load->view('dashboard/employee/employee_sidebar.php');
-        $this->load->view('dashboard/employee/employee_dashboard.php');
+        $this->load->view('dashboard/employee/employee_dashboard.php', array('current_user' => $current_user, 'department' => $department['dept_name'], 'organization' => $organization['org_name']));  
         $this->load->view('templates/footer.php');
     }
 
@@ -48,16 +56,19 @@ class EmployeeController extends CI_Controller
 
             $training_types = $this->Employee_model->getTrainingTypes();
 
+            
+
             $config = array(
-                'upload_path' => "uploads/apply_trainings", //path for upload
+                'upload_path' => base_url()."uploads/apply_trainings", //path for upload
                 'allowed_types' => "*", //restrict extension
                 'max_size' => '300000',
                 'max_width' => '30000',
                 'max_height' => '30000',
             );
+
             $this->load->library('upload', $config);
 
-            if (!$this->upload->do_upload('pdf')) {
+            if ($this->upload->do_upload('pdf')) {
                 $error = $this->upload->display_errors();
                 $this->session->set_flashdata('failure', $error);
 
@@ -84,6 +95,11 @@ class EmployeeController extends CI_Controller
                 $array_start_date = explode('-', $start_date);
                 $array_end_date = explode('-', $end_date);
 
+
+             
+
+                
+
                 $data = array(
                     'sevarth_id' => $sevarth_id,
                     'name' => $name,
@@ -99,13 +115,39 @@ class EmployeeController extends CI_Controller
                     'training_status_id' => $apply_to,
                 );
 
-                if ($this->Employee_model->insert_training($data)) {
-                    $this->session->set_flashdata('success', 'Training Applied Successfully');
-                    redirect('Employee/EmployeeController/index');
-                } else {
-                    $this->session->set_flashdata('failure', 'Unable to Apply Training');
-                    redirect('Employee/EmployeeController/apply_training');
+                if ($data['end_date'] == $data['start_date']) {
+                    $this->session->set_flashdata('failure', 'Start Date should not equal to end date');
+
+                    $this->load->view('templates/header.php');
+                    $this->load->view('templates/navbar.php');
+                    $this->load->view('dashboard/employee/employee_sidebar.php');
+                    $this->load->view('dashboard/employee/apply_training.php', ['training_types' => $training_types]);
+                    $this->load->view('templates/footer.php');
+
+                    
+                }else if($data['end_date'] == $data['start_date']){
+                    $this->session->set_flashdata('failure', 'Start Date should not less than end date');
+
+                    $this->load->view('templates/header.php');
+                    $this->load->view('templates/navbar.php');
+                    $this->load->view('dashboard/employee/employee_sidebar.php');
+                    $this->load->view('dashboard/employee/apply_training.php', ['training_types' => $training_types]);
+                    $this->load->view('templates/footer.php');
+
+                }else{
+                   
+                    if ($this->Employee_model->insert_training($data)) {
+                        $this->session->set_flashdata('success', 'Training Applied Successfully');
+                        redirect('Employee/EmployeeController/index');
+                    } else {
+                        $this->session->set_flashdata('failure', 'Unable to Apply Training');
+                        redirect('Employee/EmployeeController/apply_training');
+                    }
+
                 }
+
+            
+
             }
         }
     }

@@ -7,21 +7,53 @@ class HodController extends CI_Controller
     {
         parent::__construct(); //important to call parent constructor
         $this->load->model('Hod_model');
+        $this->load->model('Employee_model');
         $this->load->library("Fpdf");
         $this->load->model("leave_model");
     }
     public function index()
     {
+        
         // echo "Hello";
-        $dept = $this->session->userdata('dept_id');
-        print_r($dept);
-        $data['dept'] = $dept;
-        print_r($data);
-        // $this->load->view('templates/header.php');
-        // $this->load->view('templates/navbar.php');
-        // $this->load->view('dashboard/hod_sidebar.php',$data);
-        // $this->load->view('dashboard/hod_dashboard.php');
-        // $this->load->view('templates/footer.php');
+        $data['dept_id'] = $this->session->userdata('dept_id');
+        $data['dept'] = "";
+
+        // print_r( $data['dept_id']);
+
+        switch ($data['dept_id']) {
+            case "1":
+                $data['dept'] = "Computer";
+                break;
+            case "2":
+                $data['dept'] = "Electrical";
+                break;
+            case "3":
+                $data['dept'] = "IT";
+                break;
+            default:
+                $data['dept'] = "Computer";
+        }
+        
+        //get session of user
+        $current_user_id = $this->session->userdata('user_id');
+
+        $current_user = $this->Auth_model->get_employee_by_id($current_user_id);
+
+        $department = $this->Employee_model->get_department_by_id($current_user['dept_id']);
+        $organization = $this->Employee_model->get_organization_by_id($current_user['org_id']);
+
+        $data['current_user'] = $current_user;
+        $data['department'] = $department['dept_name'];
+        $data['organization'] = $organization['org_name'];
+
+        
+        
+        $this->load->view('templates/header.php');
+        $this->load->view('templates/navbar.php');
+        $this->load->view('dashboard/hod/hod_sidebar.php', $data);
+        $this->load->view('dashboard/hod/hod_dashboard.php', $data);
+        $this->load->view('templates/footer.php');
+
     }
 
     public function employee_details($employee)
@@ -40,11 +72,115 @@ class HodController extends CI_Controller
         }
     }
 
-    public function show_verifications()
+  
+
+    public function apply_training()
     {
+        $this->form_validation->set_rules('name', 'Name', 'required');
+        $this->form_validation->set_rules('organization_name', 'Organization Name', 'required');
+        $this->form_validation->set_rules('organized_by', 'Organized By', 'required');
+        $this->form_validation->set_rules('duration', 'Duration', 'required');
+        $this->form_validation->set_rules('start_date', 'Start Date', 'required');
+        $this->form_validation->set_rules('end_date', 'End Date', 'required');
+
+        if ($this->form_validation->run() == false) {
+
+            $training_types = $this->Employee_model->getTrainingTypes();
+
+            $this->load->view('templates/header.php');
+            $this->load->view('templates/navbar.php');
+            $this->load->view('dashboard/hod/hod_sidebar.php');
+            $this->load->view('dashboard/hod/apply_training.php', ['training_types' => $training_types]);
+            $this->load->view('templates/footer.php');
+        } else {
+
+            $training_types = $this->Employee_model->getTrainingTypes();
+
+            $config = array(
+                'upload_path' => "uploads/apply_trainings", //path for upload
+                'allowed_types' => "*", //restrict extension
+                'max_size' => '300000',
+                'max_width' => '30000',
+                'max_height' => '30000',
+            );
+            $this->load->library('upload', $config);
+
+            if (!$this->upload->do_upload('pdf')) {
+                $error = $this->upload->display_errors();
+                $this->session->set_flashdata('failure', $error);
+
+                $this->load->view('templates/header.php');
+                $this->load->view('templates/navbar.php');
+                $this->load->view('dashboard/hod/hod_sidebar.php');
+                $this->load->view('dashboard/hod/apply_training.php', ['training_types' => $training_types]);
+                $this->load->view('templates/footer.php');
+
+            } else {
+
+                $name = $this->input->post('name');
+                $organization_name = $this->input->post('organization_name');
+                $organization_by = $this->input->post('organized_by');
+                $duration = $this->input->post('duration');
+                $start_date = $this->input->post('start_date');
+                $end_date = $this->input->post('end_date');
+                $training_type = $this->input->post('training_type');
+                $pdf = $this->upload->data('file_name');
+
+                if ($end_date < $start_date) {
+                    $this->session->set_flashdata('failure', 'Start Date should be less than End Date');
+                    $this->load->view('templates/header.php');
+                    $this->load->view('templates/navbar.php');
+                    $this->load->view('dashboard/hod/hod_sidebar.php');
+                    $this->load->view('dashboard/hod/apply_training.php', ['training_types' => $training_types]);
+                    $this->load->view('templates/footer.php');
+
+                }else{
+
+                    //get current user
+                    $sevarth_id = $this->session->userdata('user_id');
+                    $user = $this->Auth_model->get_employee_by_id($sevarth_id);
+                    $array_start_date = explode('-', $start_date);
+                    $array_end_date = explode('-', $end_date);
+
+                    $data = array(
+                        'sevarth_id' => $sevarth_id,
+                        'name' => $name,
+                        'org_name' => $organization_name,
+                        'organized_by' => $organization_by,
+                        'duration' => $duration,
+                        'start_date' => $array_start_date[2] . "-" . $array_start_date[1] . "-" . $array_start_date[0],
+                        'end_date' => $array_end_date[2] . "-" . $array_end_date[1] . "-" . $array_end_date[0],
+                        'training_type' => $training_type,
+                        'apply_letter' => $pdf,
+                        'hod_id' => $user['hod_id'],
+                        'principal_id' => $user['principle_id'],
+                        'training_status_id' => 2, // as hod is applying training so status is 2
+                    );
+
+                    if ($this->Employee_model->insert_training($data)) {
+                        $this->session->set_flashdata('success', 'Training Applied Successfully');
+                        redirect('Hod/HodController/index');
+                    } else {
+                        $this->session->set_flashdata('failure', 'Unable to Apply Training');
+                        redirect('Hod/HodController/apply_training');
+                    }
+
+                    
+                    
+                }
+
+
+                
+
+            }
+
+        }
+
+    }
+
+    public function show_verifications(){
         $employee_for_verification_from_hod = $this->Hod_model->get_employees_for_verification();
-
-
+        
 
         $this->load->view('templates/header.php');
         $this->load->view('templates/navbar.php');
@@ -52,8 +188,9 @@ class HodController extends CI_Controller
         $this->load->view("dashboard/hod/show_verifications.php", array('employee_for_verification_from_hod' => $employee_for_verification_from_hod));
     }
 
-    public function delete_employee($employee_id)
-    {
+    
+    public function delete_employee($employee_id){
+
         $this->Hod_model->delete_employee($employee_id);
         redirect('Hod/HodController/show_employees');
     }
